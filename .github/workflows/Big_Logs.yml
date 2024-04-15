@@ -1,0 +1,27 @@
+name: Big Logs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Filling_the_logs:
+    runs-on: ubuntu-latest
+    steps:
+    - name: echo in a loop First Step
+      run: |
+        for i in {1..10000}
+        do
+        (date  && printf "\n" && echo '${{ toJSON(github) }}')
+        done
+    - name: echo in a loop Second Step
+      run: |
+        for i in {1..10000}
+        do
+        (date  && printf "\n" && echo '${{ toJSON(github) }}')
+        done
+    - name: echo in a loop Third Step
+      run: |
+        for i in {1..10000}
+        do
+        (date  && printf "\n" && echo '${{ toJSON(github) }}')
+        done
