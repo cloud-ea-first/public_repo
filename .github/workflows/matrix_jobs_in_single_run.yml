@@ -1,0 +1,72 @@
+name: Matrix jobs in single run
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run matrix jobs
+        run: |
+          declare -A job_status
+          job_status=(["build"]="success" ["test"]="success" ["lint"]="success")
+
+          for job in "${!job_status[@]}"; do
+            echo "::group::Running $job"
+            echo "======================"
+            if [ "$job" == "build" ]; then
+              # Simulate build status
+              echo "Building the project"
+              echo "0% - Starting $job"
+              sleep 2  # Simulate time taken for build
+              echo "50% - Build in progress"
+              sleep 5  # Simulate time taken for build
+              job_status["build"]="success"  # Change to "failure" to simulate a failure
+              echo "100% - Build completed"
+            elif [ "$job" == "test" ]; then
+              # Simulate test status
+              echo "Running tests"
+              echo "0% - Starting $job"
+              sleep 2  # Simulate time taken for tests
+              echo "50% - Tests in progress"
+              sleep 5  # Simulate time taken for tests
+              job_status["test"]="success"  # Change to "failure" to simulate a failure
+              echo "100% - Tests completed"
+            elif [ "$job" == "lint" ]; then
+              # Simulate lint status
+              echo "Running linter"
+              echo "0% - Starting $job"
+              sleep 2  # Simulate time taken for linting
+              echo "50% - Linter in progress"
+              sleep 5  # Simulate time taken for linting
+              job_status["lint"]="success"  # Change to "failure" to simulate a failure
+              echo "100% - Linter completed"
+            fi
+            echo "::endgroup::"
+          done
+
+          echo "::group::Summary of results"
+          echo "======================"
+          echo "Build status: ${job_status["build"]}"
+          echo "Test status: ${job_status["test"]}"
+          echo "Lint status: ${job_status["lint"]}"
+          echo "======================"
+          echo "::endgroup::"
+
+          if [ "${job_status["build"]}" != "success" ]; then
+            echo "::error::Build failed"
+            exit 1
+          fi
+          if [ "${job_status["test"]}" != "success" ]; then
+            echo "::error::Tests failed"
+            exit 1
+          fi
+          if [ "${job_status["lint"]}" != "success" ]; then
+            echo "::error::Linting failed"
+            exit 1
+          fi
+          echo "::notice::All checks passed"
