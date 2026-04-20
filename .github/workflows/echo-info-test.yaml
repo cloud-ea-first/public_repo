@@ -1,0 +1,14 @@
+name: Echo Info test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo messages
+        run: |
+          echo "[INFO -time]"
+          echo "[INFO - time]"
+          echo "[INFO - time]"
