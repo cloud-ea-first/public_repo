@@ -7,7 +7,16 @@ jobs:
   Filling_the_logs:
     runs-on: ubuntu-latest
     steps:
-    - name: echo in a loop First Step
+    - name: echo in a loop
+      run: |
+        for i in {1..21250}
+        do
+        (date  && printf "\n" && echo '${{ toJSON(github) }}')
+        done
+  Filling_the_logs_second_job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: echo in a loop
       run: |
         for i in {1..21250}
         do
