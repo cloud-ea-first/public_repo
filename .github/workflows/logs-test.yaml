@@ -1,0 +1,26 @@
+name: Log Stress Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  huge-log:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        job-index: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+
+    steps:
+      - name: Generate massive log output with annotations
+        run: |
+          for i in $(seq 1 50000); do
+            echo "[${{ matrix.job-index }}][$i] $(date --iso-8601=ns) - Log entry: $(uuidgen)"
+
+            mod=$((i % 3))
+            if [ "$mod" -eq 0 ]; then
+              echo "::warning::Job ${{ matrix.job-index }} - Warning annotation at line $i"
+            elif [ "$mod" -eq 1 ]; then
+              echo "::notice::Job ${{ matrix.job-index }} - Info annotation at line $i"
+            fi
+          done
